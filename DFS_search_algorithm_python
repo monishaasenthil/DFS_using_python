@@ -13,24 +13,29 @@ edges = [
 ]
 G.add_edges_from(edges)
 
-# Find all possible paths from 'S' to 'G' using DFS
-def find_paths(graph, start, end, path=[]):
+# Find the first path from 'S' to 'G' using DFS
+def find_path_dfs(graph, start, end, path=[]):
     path = path + [start]
+
     if start == end:
-        return [path]
-    paths = []
+        return path
+
     for neighbor in graph.successors(start):
         if neighbor not in path:
-            new_paths = find_paths(graph, neighbor, end, path)
-            for new_path in new_paths:
-                paths.append(new_path)
-    return paths
+            new_path = find_path_dfs(graph, neighbor, end, path)
+            if new_path:
+                return new_path
+
+    return None
 
 source = 'S'
 goal = 'G'
 
-# Find all possible paths using DFS
-all_paths = find_paths(G, source, goal)
+# Find the first path using DFS
+dfs_path = find_path_dfs(G, source, goal)
 
-# Print all paths
-for path in all_paths:
+# Print the first path found using DFS
+if dfs_path:
+    print("DFS Path (first path found): " + " -> ".join(dfs_path))
+else:
+    print("No path found using DFS")
